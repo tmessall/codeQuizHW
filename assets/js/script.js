@@ -49,6 +49,7 @@ function beginQuiz(e) {
 }
 
 function displayQuestion(question) {
+    forQuestion.innerHTML = "";
     var h1Tag = document.createElement("h1");
     h1Tag.innerHTML = question.ask;
     forQuestion.append(h1Tag);
@@ -71,7 +72,7 @@ function displayAnswers(question) {
 }
 
 function getAnswer(question) {
-    document.addEventListener("click", checkAnswer);
+    forQuestion.addEventListener("click", checkAnswer);
 }
 
 function checkAnswer(e) {
@@ -88,6 +89,7 @@ function checkAnswer(e) {
             displayQuestion(questionArr[i]);
         } else {
             finishQuiz();
+            // show final page
         }
     }
 }
