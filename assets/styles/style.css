@@ -9,6 +9,10 @@
     margin-top: 10%;
 }
 
+#timer {
+    text-align: right;
+}
+
 #startBtn {
     background-color: black;
     color: lightsteelblue;
@@ -16,4 +20,13 @@
 
 #answerBtn {
     background-color: lime;
+}
+
+#submitBtn {
+    background-color: blue;
+    color: white;
+}
+
+ul {
+    list-style-type: none;
 }

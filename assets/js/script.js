@@ -2,6 +2,10 @@ var intro = document.getElementById("intro");
 var startBtn = document.getElementById("startBtn");
 var forText = document.getElementById("forText");
 var final = document.getElementById("final");
+var timer = document.getElementById("timer");
+var secondsLeft = 90;
+var scoreOne = 0;
+var scoreTwo;
 
 var qOne = {
     ask: "Which variable below stores multiple of something?",
@@ -44,10 +48,25 @@ var i = 0;
 
 function beginQuiz(e) {
     e.preventDefault();
+    startCountdown();
     // Hides the starting information, brings up a question
     intro.style.display = "none";
     displayQuestion(questionArr[i]);
 }
+
+function startCountdown() {
+    var countdown = setInterval(function() {
+      secondsLeft--;
+      timer.textContent = secondsLeft + " seconds left";
+  
+      if(secondsLeft <= 0) {
+        finishQuiz();
+        clearInterval(countdown);
+        timer.textContent = "";
+      }
+  
+    }, 1000);
+  }
 
 function displayQuestion(question) {
     forText.innerHTML = "";
@@ -85,24 +104,43 @@ function checkAnswer(e) {
     if (e.target.matches("button")) {
         if (e.target.getAttribute("value") === "correct") {
             console.log("correct");
+            scoreOne++;
         } else {
             console.log("incorrect");
+            secondsLeft -= 15;
         }
         i++;
         if (i < questionArr.length) {
             displayQuestion(questionArr[i]);
         } else {
-            finishQuiz();
-            // show final page
+            scoreTwo = secondsLeft;
+            finishQuiz()
         }
     }
 }
 
 function finishQuiz() {
+    secondsLeft = 0;
+    if (scoreTwo < 0) {scoreTwo = 0};
     forText.innerHTML = "";
     var h1Tag = document.createElement("h1");
-    h1Tag.innerHTML = "Final Scores";
+    var pTag = document.createElement("p");
+    var pTwoTag = document.createElement("p");
+    var formTag = document.createElement("form");
+    var inputTag = document.createElement("input");
+    var submitBtn = document.createElement("button");
+    submitBtn.setAttribute("id", "submitBtn");
+    h1Tag.innerHTML = "Final Score";
+    pTag.innerHTML = scoreOne + " correct answers with " + scoreTwo + " seconds remaining.";
+    pTwoTag.innerHTML = "Input your initials below to save your score!";
+    submitBtn.innerHTML = "Submit";
+    formTag.appendChild(inputTag);
+    formTag.appendChild(submitBtn);
     forText.append(h1Tag);
+    forText.append(pTag);
+    forText.append(pTwoTag);
+    forText.append(formTag);
+    saveScore();
 }
 
 // Changes color of the START button on hover
@@ -117,4 +155,5 @@ intro.addEventListener("mouseover", function(e) {
     }
 })
 
+// Starts quiz when start button is clicked
 startBtn.addEventListener("click", beginQuiz);
