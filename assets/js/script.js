@@ -71,20 +71,30 @@ var questionArr = [qOne, qTwo, qThree, qFour, qFive, qSix];
 var i;
 
 function beginQuiz(e) {
+    // Resets these variables so the quiz could be done multiple times
     i = 0;
+    score.scoreOne = "";
+    score.scoreTwo = "";
+    score.initials = "";
+
     e.preventDefault();
+
+    // Begins the timer in the top right
     startCountdown();
-    // Hides the starting information, brings up a question
+
+    // Hides the starting information, brings up first question
     intro.style.display = "none";
     displayQuestion(questionArr[i]);
 }
 
+// Controls the timer in the top right
 function startCountdown() {
     var countdown = setInterval(function() {
       secondsLeft--;
       timer.textContent = secondsLeft + " seconds left";
   
       if(secondsLeft <= 0) {
+        // Goes to final page
         finishQuiz();
         clearInterval(countdown);
         timer.textContent = "";
@@ -93,15 +103,19 @@ function startCountdown() {
     }, 1000);
   }
 
+// Displays a question
 function displayQuestion(question) {
     forQuestion.innerHTML = "";
     var h1Tag = document.createElement("h1");
     h1Tag.innerHTML = question.ask;
     forQuestion.append(h1Tag);
+    // Displays this question's answers
     displayAnswers(question);
-    getAnswer(question);
+    // Checks what the user answers
+    forQuestion.addEventListener("click", checkAnswer);
 }
 
+// Displays the potential answers to a question
 function displayAnswers(question) {
     for (var i = 0; i < question.answers.length; i++) {
         var ulTag = document.createElement("ul");
@@ -120,35 +134,38 @@ function displayAnswers(question) {
     }
 }
 
-function getAnswer(question) {
-    forQuestion.addEventListener("click", checkAnswer);
-}
-
+// Checking the user's answer
 function checkAnswer(e) {
     e.preventDefault();
     if (e.target.matches("button")) {
         if (e.target.getAttribute("value") === "correct") {
-            console.log("correct");
+            // Increases number of correct answers
             scoreOne++;
         } else {
-            console.log("incorrect");
+            // Time penalty for incorrect answer
             secondsLeft -= 15;
         }
+        // Sends to next question
         i++;
         if (i < questionArr.length) {
             displayQuestion(questionArr[i]);
         } else {
+            // Marks time where it is for that score
             scoreTwo = secondsLeft;
-            finishQuiz()
+            // Goes to final page
+            finishQuiz();
         }
     }
 }
 
+// Final page
 function finishQuiz() {
     secondsLeft = 0;
+    // Ensures score isn't negative
     if (scoreTwo < 0) {scoreTwo = 0};
     forQuestion.innerHTML = "";
     final.innerHTML = "";
+    // Displays the score and asks for initials
     var h1Tag = document.createElement("h1");
     var pTag = document.createElement("p");
     var pTwoTag = document.createElement("p");
@@ -168,14 +185,13 @@ function finishQuiz() {
     final.addEventListener("click", saveScore);
 }
 
+// Saves scores by initial after name is checked
 function saveScore(e) {
-    e.preventDefault();
     if (e.target.matches("button")) {
-        console.log(inputTag.value);
+        // Sets these so they can go to local storage
         score.scoreOne = scoreOne;
         score.scoreTwo = scoreTwo;
         score.initials = inputTag.value;
-        var scoreSaved = false;
         checkScore(topScore, "topScore");
         checkScore(secondScore, "secondScore");
         checkScore(thirdScore, "thirdScore");
@@ -185,19 +201,22 @@ function saveScore(e) {
 
 }
 
+// Puts score into local storage (if it belongs)
 function checkScore(localScore, str) {
-    console.log(localScore);
+    // Makes sure the checks won't break it
     if (localScore !== null && score !== null) {
+        // Adds as highest score by correct #
         if (score.scoreOne > localScore.scoreOne) {
             localStorage.setItem(str, JSON.stringify(score));
             score = localScore;
+        // Adds as highest score by time (tiebreaker)
         } else if (score.scoreOne == localScore.scoreOne && score.scoreTwo > localScore.scoreTwo) {
-            localStorage.setITem(str, JSON.stringify(score));
+            localStorage.setItem(str, JSON.stringify(score));
             score = localScore;
         }
+    // Adds if there are still null score values
     } else if (localScore == null && score !== null) {
         localStorage.setItem(str, JSON.stringify(score));
-        console.log("is you doing this?");
         score = null;
     }
 }
