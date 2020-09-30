@@ -1,21 +1,19 @@
-#intro {
-    text-align: center;
-    margin-top: 10%;
-    padding-bottom: 50px;
-}
-
-#forQuestion {
-    text-align: center;
-    margin-top: 10%;
-}
-
-#final {
-    text-align: center;
-    margin-top: 10%;
+#topBar {
+    outline: solid 5px red;
 }
 
 #timer {
+    float: right;
     text-align: right;
+}
+
+section {
+    text-align: center;
+    margin-top: 10%;
+}
+
+#intro {
+    padding-bottom: 50px;
 }
 
 #startBtn {
@@ -34,4 +32,5 @@
 
 ul {
     list-style-type: none;
+    padding: 0;
 }
