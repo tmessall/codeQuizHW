@@ -15,16 +15,21 @@
     <!-- Timer in the top right -->
     <span id="timer">90 seconds left</span>
     <!-- Provides the intro at the very beginning -->
-    <section id="intro">
-        <h1>Coding Quiz!</h1>
-        <p>Press the START button below to take a timed quiz on Javascript! For every incorrect answer, your time will decrease by 15 seconds. Try to get the best time!</p>
-        <button id="startBtn">START</button>
+    <section class="intro container-fluid">
+        <div class="row">
+            <div class="col-md-2 col-lg-3"></div>
+            <div class="col-12 col-md-8 col-lg-6">
+                <h1>Coding Quiz!</h1>
+                <p>Press the START button below to take a timed quiz on Javascript! For every incorrect answer, your time will decrease by 15 seconds. Try to get the best time!</p>
+                <button id="startBtn">START</button>
+            </div>
+        </div>
     </section>
 
     <!-- Area the questions and final can be put into -->
-    <section id="forQuestion"></section>
+    <section class="container-fluid forQuestion"></section>
 
-    <section id="final"></section>
+    <section class="container-fluid final"></section>
     
     <!-- Script -->
     <script src="assets/js/script.js"></script>

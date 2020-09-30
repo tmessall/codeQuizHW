@@ -1,8 +1,8 @@
 // HTML Elements
-var intro = document.getElementById("intro");
+var intro = document.querySelector(".intro");
 var startBtn = document.getElementById("startBtn");
-var forQuestion = document.getElementById("forQuestion");
-var final = document.getElementById("final");
+var forQuestion = document.querySelector(".forQuestion");
+var final = document.querySelector(".final");
 var timer = document.getElementById("timer");
 
 // For the final page, needs to be global so input can be checked
