@@ -1,16 +1,17 @@
 var intro = document.getElementById("intro");
-var startBtn = document.getElementById("startBtn")
+var startBtn = document.getElementById("startBtn");
+var forQuestion = document.getElementById("forQuestion");
 
 var qOne = {
-    question: "What are noodles",
-    answers: "macaroni",
-    correctAnswer: "macaroni"
+    ask: "What type of variable stores multiple of something?",
+    answers: ["Array", "String", "Integer", "Boolean"],
+    correctAnswer: "Array"
 }
 
 var qTwo = {
-    question: "What is the order of letters",
-    answers: "alphabet",
-    correctAnswer: "alphabet",
+    ask: "What does arr.length return?",
+    answers: ["Length of arr", "10", "Infinity", "The last index of arr"],
+    correctAnswer: "Length of arr"
 }
 
 var questionArr = [qOne, qTwo]
@@ -21,7 +22,14 @@ function beginQuiz(e) {
     intro.style.display = "none";
     for (var i = 0; i < questionArr.length; i++) {
         console.log(questionArr[i].answers);
+        displayQuestion(questionArr[i]);
     }
+}
+
+function displayQuestion(question) {
+    var h1Tag = document.createElement("h1");
+    h1Tag.innerHTML = question.ask;
+    forQuestion.append(h1Tag);
 }
 
 // Changes color of the START button on hover

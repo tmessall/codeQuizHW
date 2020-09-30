@@ -4,6 +4,11 @@
     padding-bottom: 50px;
 }
 
+#forQuestion {
+    text-align: center;
+    margin-top: 10%;
+}
+
 #startBtn {
     background-color: black;
     color: lightsteelblue;
