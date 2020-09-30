@@ -1,6 +1,7 @@
 var intro = document.getElementById("intro");
 var startBtn = document.getElementById("startBtn");
-var forQuestion = document.getElementById("forQuestion");
+var forText = document.getElementById("forText");
+var final = document.getElementById("final");
 
 var qOne = {
     ask: "Which variable below stores multiple of something?",
@@ -49,10 +50,10 @@ function beginQuiz(e) {
 }
 
 function displayQuestion(question) {
-    forQuestion.innerHTML = "";
+    forText.innerHTML = "";
     var h1Tag = document.createElement("h1");
     h1Tag.innerHTML = question.ask;
-    forQuestion.append(h1Tag);
+    forText.append(h1Tag);
     displayAnswers(question);
     getAnswer(question);
 }
@@ -60,11 +61,15 @@ function displayQuestion(question) {
 function displayAnswers(question) {
     for (var i = 0; i < question.answers.length; i++) {
         var ulTag = document.createElement("ul");
-        forQuestion.append(ulTag);
+        forText.append(ulTag);
         var liTag = document.createElement("li");
         var answerBtn = document.createElement("button");
         answerBtn.innerHTML = (i + 1) + ". " + question.answers[i];
-        answerBtn.setAttribute("value", "incorrect");
+        if (question.answers[i] === question.correctAnswer) {
+            answerBtn.setAttribute("value", "correct");
+        } else {
+            answerBtn.setAttribute("value", "incorrect");
+        }
         answerBtn.setAttribute("id", "answerBtn");
         liTag.appendChild(answerBtn);
         ulTag.append(liTag);
@@ -72,17 +77,16 @@ function displayAnswers(question) {
 }
 
 function getAnswer(question) {
-    forQuestion.addEventListener("click", checkAnswer);
+    forText.addEventListener("click", checkAnswer);
 }
 
 function checkAnswer(e) {
     e.preventDefault();
     if (e.target.matches("button")) {
-        if (e.target.getAttribute("value") === "incorrect") {
-            console.log("incorrect");
-            goToNext = true;
+        if (e.target.getAttribute("value") === "correct") {
+            console.log("correct");
         } else {
-            goToNext = true;
+            console.log("incorrect");
         }
         i++;
         if (i < questionArr.length) {
@@ -95,7 +99,10 @@ function checkAnswer(e) {
 }
 
 function finishQuiz() {
-    console.log("you did it");
+    forText.innerHTML = "";
+    var h1Tag = document.createElement("h1");
+    h1Tag.innerHTML = "Final Scores";
+    forText.append(h1Tag);
 }
 
 // Changes color of the START button on hover
