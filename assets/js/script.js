@@ -4,6 +4,7 @@ var startBtn = document.getElementById("startBtn");
 var forQuestion = document.querySelector(".forQuestion");
 var final = document.querySelector(".final");
 var timer = document.getElementById("timer");
+var result = document.querySelector(".result");
 
 // For the final page, needs to be global so input can be checked
 var inputTag = document.createElement("input");
@@ -101,12 +102,15 @@ function startCountdown() {
 
 // Displays a question
 function displayQuestion(question) {
+    // Displays the question to page
     forQuestion.innerHTML = "";
     var h1Tag = document.createElement("h1");
     h1Tag.innerHTML = question.ask;
     forQuestion.append(h1Tag);
+    
     // Displays this question's answers
     displayAnswers(question);
+
     // Checks what the user answers
     forQuestion.addEventListener("click", checkAnswer);
 }
@@ -115,18 +119,21 @@ function displayQuestion(question) {
 function displayAnswers(question) {
     var displayed = [];
     for (var i = 0; i < question.answers.length; i++) {
+        // Randomizes order of answers
         var newAns = false;
         while (!newAns) {
             var numAns = Math.floor(Math.random() * question.answers.length);
             newAns = true;
-            console.log("test");
             for (var j = 0; j < displayed.length; j++) {
                 if (numAns === displayed[j]) {
                     newAns = false;
                 }
             }
         }
+        // Ensures no repeat answer
         displayed.push(numAns);
+
+        // Displays answer to page
         var ulTag = document.createElement("ul");
         forQuestion.append(ulTag);
         var liTag = document.createElement("li");
@@ -150,9 +157,15 @@ function checkAnswer(e) {
         if (e.target.getAttribute("value") === "correct") {
             // Increases number of correct answers
             scoreOne++;
+            result.innerHTML = "Correct";
+            result.style.color = "lime";
+            wipeResult();
         } else {
             // Time penalty for incorrect answer
             secondsLeft -= 15;
+            result.innerHTML = "Incorrect";
+            result.style.color = "red";
+            wipeResult();
         }
         // Sends to next question
         if (asked.length < questionArr.length) {
@@ -178,13 +191,29 @@ function checkAnswer(e) {
     }
 }
 
+// Removes pop up of correct or incorrect at the bottom of the page
+function wipeResult() {
+    var time = 1;
+    var countdown = setInterval(function() {
+      time--;
+  
+      if(time === 0) {
+        clearInterval(countdown);
+        result.innerHTML = "";
+      }
+  
+    }, 1000);
+  }
+
 // Final page
 function finishQuiz() {
     secondsLeft = 0;
+
     // Ensures score isn't negative
     if (scoreTwo < 0) {scoreTwo = 0};
     forQuestion.innerHTML = "";
     final.innerHTML = "";
+
     // Displays the score and asks for initials
     var h1Tag = document.createElement("h1");
     var pTag = document.createElement("p");
@@ -207,16 +236,22 @@ function finishQuiz() {
 
 // Saves scores by initial after name is checked
 function saveScore(e) {
+    e.preventDefault();
     if (e.target.matches("button")) {
         // Sets these so they can go to local storage
         score.scoreOne = scoreOne;
         score.scoreTwo = scoreTwo;
         score.initials = inputTag.value;
+
+        // Sees where score belongs among high scores
         checkScore(topScore, "topScore");
         checkScore(secondScore, "secondScore");
         checkScore(thirdScore, "thirdScore");
         checkScore(fourthScore, "fourthScore");
         checkScore(fifthScore, "fifthScore");
+
+        // Takes user to highscores
+        location.href="scores.html";
     }
 
 }
