@@ -25,7 +25,7 @@ var score = {
 // Global Variables to track score and time
 var secondsLeft = 90;
 var scoreOne = 0;
-var scoreTwo;
+var scoreTwo = 0;
 
 // Questions
 var qOne = {
@@ -113,13 +113,26 @@ function displayQuestion(question) {
 
 // Displays the potential answers to a question
 function displayAnswers(question) {
+    var displayed = [];
     for (var i = 0; i < question.answers.length; i++) {
+        var newAns = false;
+        while (!newAns) {
+            var numAns = Math.floor(Math.random() * question.answers.length);
+            newAns = true;
+            console.log("test");
+            for (var j = 0; j < displayed.length; j++) {
+                if (numAns === displayed[j]) {
+                    newAns = false;
+                }
+            }
+        }
+        displayed.push(numAns);
         var ulTag = document.createElement("ul");
         forQuestion.append(ulTag);
         var liTag = document.createElement("li");
         var answerBtn = document.createElement("button");
-        answerBtn.innerHTML = (i + 1) + ". " + question.answers[i];
-        if (question.answers[i] === question.correctAnswer) {
+        answerBtn.innerHTML = (i + 1) + ". " + question.answers[numAns];
+        if (question.answers[numAns] === question.correctAnswer) {
             answerBtn.setAttribute("value", "correct");
         } else {
             answerBtn.setAttribute("value", "incorrect");
@@ -146,10 +159,11 @@ function checkAnswer(e) {
             var newQ = false;
             var nextQ;
             while (!newQ) {
+                newQ = true;
                 nextQ = Math.floor(Math.random() * questionArr.length);
                 for (var i = 0; i < asked.length; i++) {
-                    if (nextQ !== asked[i]) {
-                        newQ = true;
+                    if (nextQ === asked[i]) {
+                        newQ = false;
                     }
                 }
             }
