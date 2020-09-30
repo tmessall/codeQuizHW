@@ -67,16 +67,10 @@ var qSix = {
 // Array of Questions
 var questionArr = [qOne, qTwo, qThree, qFour, qFive, qSix];
 
-// Global variable to loop through each question
-var i;
+// Global variable keeping track of asked questions
+var asked = [];
 
 function beginQuiz(e) {
-    // Resets these variables so the quiz could be done multiple times
-    i = 0;
-    score.scoreOne = "";
-    score.scoreTwo = "";
-    score.initials = "";
-
     e.preventDefault();
 
     // Begins the timer in the top right
@@ -84,7 +78,9 @@ function beginQuiz(e) {
 
     // Hides the starting information, brings up first question
     intro.style.display = "none";
-    displayQuestion(questionArr[i]);
+    var firstQ = Math.floor(Math.random() * questionArr.length);
+    asked.push(firstQ);
+    displayQuestion(questionArr[firstQ]);
 }
 
 // Controls the timer in the top right
@@ -146,9 +142,19 @@ function checkAnswer(e) {
             secondsLeft -= 15;
         }
         // Sends to next question
-        i++;
-        if (i < questionArr.length) {
-            displayQuestion(questionArr[i]);
+        if (asked.length < questionArr.length) {
+            var newQ = false;
+            var nextQ;
+            while (!newQ) {
+                nextQ = Math.floor(Math.random() * questionArr.length);
+                for (var i = 0; i < asked.length; i++) {
+                    if (nextQ !== asked[i]) {
+                        newQ = true;
+                    }
+                }
+            }
+            asked.push(nextQ);
+            displayQuestion(questionArr[nextQ]);
         } else {
             // Marks time where it is for that score
             scoreTwo = secondsLeft;
