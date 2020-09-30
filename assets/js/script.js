@@ -30,6 +30,20 @@ function displayQuestion(question) {
     var h1Tag = document.createElement("h1");
     h1Tag.innerHTML = question.ask;
     forQuestion.append(h1Tag);
+    var quest = question;
+    displayAnswers(quest);
+}
+
+function displayAnswers(question) {
+    for (var i = 0; i < question.answers.length; i++) {
+        var ulTag = document.createElement("ul");
+        forQuestion.append(ulTag);
+        var liTag = document.createElement("li");
+        var answerBtn = document.createElement("button");
+        answerBtn.innerHTML = (i + 1) + ". " + question.answers[i];
+        liTag.appendChild(answerBtn);
+        ulTag.append(liTag);
+    }
 }
 
 // Changes color of the START button on hover
