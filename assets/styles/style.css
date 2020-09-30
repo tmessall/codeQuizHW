@@ -4,7 +4,12 @@
     padding-bottom: 50px;
 }
 
-#forText {
+#forQuestion {
+    text-align: center;
+    margin-top: 10%;
+}
+
+#final {
     text-align: center;
     margin-top: 10%;
 }

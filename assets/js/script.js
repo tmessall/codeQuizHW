@@ -1,12 +1,33 @@
+// HTML Elements
 var intro = document.getElementById("intro");
 var startBtn = document.getElementById("startBtn");
-var forText = document.getElementById("forText");
+var forQuestion = document.getElementById("forQuestion");
 var final = document.getElementById("final");
 var timer = document.getElementById("timer");
+
+// For the final page, needs to be global so input can be checked
+var inputTag = document.createElement("input");
+
+// Creates top scores, second scores, third scores, fourth scores, fifth scores
+var topScore = JSON.parse(localStorage.getItem("topScore"));
+var secondScore = JSON.parse(localStorage.getItem("secondScore"));
+var thirdScore = JSON.parse(localStorage.getItem("thirdScore"));
+var fourthScore = JSON.parse(localStorage.getItem("fourthScore"));
+var fifthScore = JSON.parse(localStorage.getItem("fifthScore"));
+
+// Creates the object to track score
+var score = {
+    scoreOne: "",
+    scoreTwo: "",
+    initials: ""
+}
+
+// Global Variables to track score and time
 var secondsLeft = 90;
 var scoreOne = 0;
 var scoreTwo;
 
+// Questions
 var qOne = {
     ask: "Which variable below stores multiple of something?",
     answers: ["Array", "String", "Integer", "Boolean"],
@@ -43,10 +64,14 @@ var qSix = {
     correctAnswer: "Keyboards"
 }
 
+// Array of Questions
 var questionArr = [qOne, qTwo, qThree, qFour, qFive, qSix];
-var i = 0;
+
+// Global variable to loop through each question
+var i;
 
 function beginQuiz(e) {
+    i = 0;
     e.preventDefault();
     startCountdown();
     // Hides the starting information, brings up a question
@@ -69,10 +94,10 @@ function startCountdown() {
   }
 
 function displayQuestion(question) {
-    forText.innerHTML = "";
+    forQuestion.innerHTML = "";
     var h1Tag = document.createElement("h1");
     h1Tag.innerHTML = question.ask;
-    forText.append(h1Tag);
+    forQuestion.append(h1Tag);
     displayAnswers(question);
     getAnswer(question);
 }
@@ -80,7 +105,7 @@ function displayQuestion(question) {
 function displayAnswers(question) {
     for (var i = 0; i < question.answers.length; i++) {
         var ulTag = document.createElement("ul");
-        forText.append(ulTag);
+        forQuestion.append(ulTag);
         var liTag = document.createElement("li");
         var answerBtn = document.createElement("button");
         answerBtn.innerHTML = (i + 1) + ". " + question.answers[i];
@@ -96,7 +121,7 @@ function displayAnswers(question) {
 }
 
 function getAnswer(question) {
-    forText.addEventListener("click", checkAnswer);
+    forQuestion.addEventListener("click", checkAnswer);
 }
 
 function checkAnswer(e) {
@@ -122,12 +147,12 @@ function checkAnswer(e) {
 function finishQuiz() {
     secondsLeft = 0;
     if (scoreTwo < 0) {scoreTwo = 0};
-    forText.innerHTML = "";
+    forQuestion.innerHTML = "";
+    final.innerHTML = "";
     var h1Tag = document.createElement("h1");
     var pTag = document.createElement("p");
     var pTwoTag = document.createElement("p");
     var formTag = document.createElement("form");
-    var inputTag = document.createElement("input");
     var submitBtn = document.createElement("button");
     submitBtn.setAttribute("id", "submitBtn");
     h1Tag.innerHTML = "Final Score";
@@ -136,11 +161,45 @@ function finishQuiz() {
     submitBtn.innerHTML = "Submit";
     formTag.appendChild(inputTag);
     formTag.appendChild(submitBtn);
-    forText.append(h1Tag);
-    forText.append(pTag);
-    forText.append(pTwoTag);
-    forText.append(formTag);
-    saveScore();
+    final.append(h1Tag);
+    final.append(pTag);
+    final.append(pTwoTag);
+    final.append(formTag);
+    final.addEventListener("click", saveScore);
+}
+
+function saveScore(e) {
+    e.preventDefault();
+    if (e.target.matches("button")) {
+        console.log(inputTag.value);
+        score.scoreOne = scoreOne;
+        score.scoreTwo = scoreTwo;
+        score.initials = inputTag.value;
+        var scoreSaved = false;
+        checkScore(topScore, "topScore");
+        checkScore(secondScore, "secondScore");
+        checkScore(thirdScore, "thirdScore");
+        checkScore(fourthScore, "fourthScore");
+        checkScore(fifthScore, "fifthScore");
+    }
+
+}
+
+function checkScore(localScore, str) {
+    console.log(localScore);
+    if (localScore !== null && score !== null) {
+        if (score.scoreOne > localScore.scoreOne) {
+            localStorage.setItem(str, JSON.stringify(score));
+            score = localScore;
+        } else if (score.scoreOne == localScore.scoreOne && score.scoreTwo > localScore.scoreTwo) {
+            localStorage.setITem(str, JSON.stringify(score));
+            score = localScore;
+        }
+    } else if (localScore == null && score !== null) {
+        localStorage.setItem(str, JSON.stringify(score));
+        console.log("is you doing this?");
+        score = null;
+    }
 }
 
 // Changes color of the START button on hover
